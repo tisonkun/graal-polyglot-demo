@@ -12,11 +12,6 @@ $ R
 
 ```
 $ gem install git
-
-# troubleshooting:
-#   modify $lib/git/lib.rb#L953-959 to unuse Thread
-#   before https://github.com/oracle/truffleruby/issues/1643
-#   resolved
 ```
 
 ## Build

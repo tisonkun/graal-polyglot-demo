@@ -16,7 +16,10 @@ public enum Ruby {
     }
 
     static {
-        context = Context.newBuilder("ruby").allowAllAccess(true).build();
+        context = Context.newBuilder("ruby")
+                .allowAllAccess(true)
+                .option("ruby.single_threaded", "false")
+                .build();
         context.eval("ruby", newline("require 'git'"));
     }
 

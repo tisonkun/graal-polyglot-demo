@@ -25,5 +25,7 @@ public class GitPlot {
         Commits commits = Ruby.generateGitInfo(repo, since);
 
         R.ggplot(commits, output);
+
+        System.exit(0);
     }
 }
