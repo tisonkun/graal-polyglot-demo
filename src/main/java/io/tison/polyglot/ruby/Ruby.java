@@ -3,9 +3,6 @@ package io.tison.polyglot.ruby;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum Ruby {
     ;
 
@@ -26,24 +23,21 @@ public enum Ruby {
     public static Commits generateGitInfo(
             String repoPath,
             String since) {
-        Value commits = context.eval("ruby", newline("") +
+        final Value commits = context.eval("ruby", newline("") +
                 newline("g = Git.open('" + repoPath + "')") +
                 newline("g.log('" + Integer.MAX_VALUE + "')" +
                         ".since('" + since + "')" +
                         ".collect { |c| [c.author.email, c.date.strftime(\"%Y-%m\")] }"));
 
-        List<Commits.Info> infos = new ArrayList<>();
-        long commitsArraySize = commits.getArraySize();
+        final long commitsArraySize = commits.getArraySize();
+
+        final Commits ret = new Commits(commitsArraySize);
 
         for (int i = 0; i < commitsArraySize; i++) {
-            infos.add(
-                    new Commits.Info(
-                            commits.getArrayElement(i).getArrayElement(0).asString(),
-                            commits.getArrayElement(i).getArrayElement(1).asString()
-                    )
-            );
+            ret.email[i] = commits.getArrayElement(i).getArrayElement(0).asString();
+            ret.date[i] = commits.getArrayElement(i).getArrayElement(1).asString();
         }
 
-        return new Commits(infos.toArray(new Commits.Info[0]));
+        return ret;
     }
 }
